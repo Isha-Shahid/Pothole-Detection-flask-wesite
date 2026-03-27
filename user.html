@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Dashboard | RoadGuard AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-blue: #0066FF;
+            --dark-navy: #0A192F;
+            --light-bg: #F8FAFC;
+            --critical: #EF4444;
+            --moderate: #F59E0B;
+            --minor: #10B981;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-navy);
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #E2E8F0;
+            padding: 15px 0;
+        }
+        .navbar-brand { font-weight: 800; letter-spacing: -0.5px; }
+
+        .dashboard-container { padding: 40px 0; }
+
+        /* Report Card Styling */
+        .report-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(10, 25, 47, 0.04);
+            border: 1px solid rgba(0,0,0,0.02);
+            position: sticky;
+            top: 20px;
+        }
+
+        .form-control {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            background-color: #F8FAFC;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.2);
+        }
+
+        /* Status List Styling */
+        .status-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #F1F5F9;
+            transition: 0.3s;
+        }
+
+        .status-card:hover { border-color: var(--primary-blue); }
+
+        .severity-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .bg-critical { background: #FEE2E2; color: var(--critical); }
+        .bg-moderate { background: #FEF3C7; color: var(--moderate); }
+        .bg-minor { background: #D1FAE5; color: var(--minor); }
+
+        .user-welcome { font-weight: 800; margin-bottom: 5px; }
+        .section-title { font-weight: 700; color: #64748B; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+
+        /* Image Preview Placeholder */
+        .upload-placeholder {
+            border: 2px dashed #CBD5E1;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .upload-placeholder:hover { border-color: var(--primary-blue); background: #F0F7FF; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">ROADGUARD <span class="text-primary">AI</span></a>
+            <div class="d-flex align-items-center">
+                <span class="me-3 small fw-bold text-muted">Portal: Public Access</span>
+                <a href="/logout" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success alert-dismissible fade show rounded-4 mb-4" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="row g-4">
+
+            <div class="col-lg-5">
+                <div class="report-card">
+                    <h5 class="user-welcome">Hello, {{ user }}!</h5>
+                    <p class="text-muted small mb-4">Report road damage to the city maintenance team.</p>
+
+                    <form action="/report" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold opacity-75">LOCATION DETAILS</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-primary"></i></span>
+                                <input type="text" name="location" class="form-control border-start-0" placeholder="e.g., Karsaz Road, Karachi" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold opacity-75">POTHOLE VISUALS</label>
+                            <label for="imageUpload" class="upload-placeholder w-100 d-block">
+                                <i class="bi bi-cloud-arrow-up fs-2 text-primary"></i>
+                                <p class="mb-0 small fw-bold mt-2">Click to upload photo</p>
+                                <span class="text-muted" style="font-size: 0.7rem;">PNG, JPG (Max 5MB)</span>
+                            </label>
+                            <input type="file" id="imageUpload" name="pothole_image" class="d-none" accept="image/*" required>
+                            <div id="fileName" class="text-center mt-2 small text-primary fw-bold"></div>
+                        </div>
+
+                        <button type="submit" class="btn-submit">
+                            <i class="bi bi-cpu-fill me-2"></i> Submit for AI Analysis
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <p class="section-title">Community Awareness Feed</p>
+
+                {% if reports %}
+                    {% for report in reports %}
+                    <div class="status-card d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="bg-light p-3 rounded-circle">
+                                {% if report.severity == 'Critical' %}
+                                    <i class="bi bi-exclamation-triangle-fill fs-4 text-danger"></i>
+                                {% elif report.severity == 'Moderate' %}
+                                    <i class="bi bi-info-circle-fill fs-4 text-warning"></i>
+                                {% else %}
+                                    <i class="bi bi-check-circle-fill fs-4 text-success"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-0 fw-bold">{{ report.location }}</h6>
+                                    <small class="text-muted">Status: <strong>{{ report.status }}</strong> • {{ report.date_posted.strftime('%d %b, %H:%M') }}</small>
+                                </div>
+                                <span class="severity-badge
+                                    {% if report.severity == 'Critical' %}bg-critical
+                                    {% elif report.severity == 'Moderate' %}bg-moderate
+                                    {% else %}bg-minor{% endif %}">
+                                    {{ report.severity }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5 border rounded-4 bg-white">
+                        <i class="bi bi-shield-check fs-1 text-muted opacity-25"></i>
+                        <p class="text-muted mt-2">No active reports in your area.</p>
+                    </div>
+                {% endif %}
+
+                <div class="text-center mt-4">
+                    <button class="btn btn-light btn-sm fw-bold px-4 rounded-pill">View Historical Reports</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // UI logic to show the file name once selected
+        document.getElementById('imageUpload').onchange = function () {
+            const file = this.files[0];
+            if (file) {
+                document.getElementById('fileName').innerHTML = '<i class="bi bi-check2-circle"></i> Selected: ' + file.name;
+            }
+        };
+    </script>
+</body>
+</html>

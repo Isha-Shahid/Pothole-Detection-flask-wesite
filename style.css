@@ -1,0 +1,40 @@
+:root {
+    --primary-blue: #0066FF;
+    --dark-navy: #0A192F;
+    --danger-red: #E63946;
+}
+
+body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--dark-navy); }
+
+/* Navigation */
+.navbar { backdrop-filter: blur(15px); background: rgba(255, 255, 255, 0.9); }
+
+/* Hero */
+.hero { position: relative; min-height: 100vh; display: flex; align-items: center; background: url('https://images.unsplash.com/photo-1599591459521-88f5728a50c8?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover; }
+.hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0) 100%); z-index: 1; }
+.hero-content { position: relative; z-index: 2; }
+.text-gradient { background: linear-gradient(to right, var(--primary-blue), #00C2FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* Cards & Stats */
+.stat-card { background: var(--dark-navy); color: white; padding: 40px; border-radius: 24px; }
+.stat-card.bg-blue { background: var(--primary-blue); }
+.section-padding { padding: 100px 0; }
+
+/* Registry */
+.registry-card { background: white; border-radius: 32px; border: 1px solid #eee; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.02); }
+.severity-pill { padding: 5px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+.sev-high { background: #FFE5E5; color: var(--danger-red); }
+
+/* Map */
+.map-container { position: relative; min-height: 520px; background: #0A192F; }
+.map-bg { width: 100%; height: 100%; background: url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?q=80') center/cover; opacity: 0.4; position: absolute; }
+.map-marker { width: 15px; height: 15px; border-radius: 50%; position: absolute; border: 2px solid white; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); } }
+.pulse-red { background: var(--danger-red); }
+
+/* Modal */
+.portal-modal-content { border-radius: 28px; overflow: hidden; border: none; }
+.portal-link { background: white; border: 1px solid #eee; transition: 0.3s; text-decoration: none; display: block; color: inherit; }
+.portal-link:hover { transform: translateY(-3px); border-color: var(--primary-blue); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+.icon-box { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-right: 15px; font-size: 1.5rem; }
+.bg-blue-subtle { background: #eef4ff; }

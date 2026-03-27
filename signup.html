@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | RoadGuard AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0066FF;
+            --dark-navy: #0A192F;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFC;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .signup-card {
+            background: white;
+            padding: 45px;
+            border-radius: 32px;
+            box-shadow: 0 40px 80px rgba(10, 25, 47, 0.08);
+            width: 100%;
+            max-width: 550px;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--dark-navy);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            background: #F1F5F9;
+            padding: 6px;
+            border-radius: 16px;
+        }
+
+        .role-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px 5px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .role-option.active {
+            background: white;
+            color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-control {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid #E2E8F0;
+            background-color: #F8FAFC;
+        }
+
+        .btn-signup {
+            background-color: var(--dark-navy);
+            color: white;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 700;
+            width: 100%;
+            border: none;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-signup:hover {
+            background-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 102, 255, 0.2);
+        }
+
+        .login-link { text-align: center; margin-top: 25px; font-size: 0.9rem; }
+        .login-link a { color: var(--primary-blue); text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div class="signup-card">
+        <a href="/" class="brand-logo">ROADGUARD <span class="text-primary">AI</span></a>
+
+        <h4 class="fw-800 mb-2 text-center">Create Professional Account</h4>
+        <p class="text-muted small mb-4 text-center">Register your credentials for the infrastructure portal.</p>
+
+        <div class="role-selector">
+            <div class="role-option active" onclick="setRole(this, 'user')">Public Access</div>
+            <div class="role-option" onclick="setRole(this, 'maintenance')">Field Operations</div>
+            <div class="role-option" onclick="setRole(this, 'admin')">Municipal Oversight</div>
+        </div>
+
+        <form action="/signup" method="POST">
+            <input type="hidden" name="role" id="selectedRoleInput" value="user">
+
+            <div class="row g-3">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label small fw-bold text-uppercase opacity-75">Full Name</label>
+                    <input type="text" name="fullname" class="form-control" placeholder="Esha Shahid" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label small fw-bold text-uppercase opacity-75" id="idLabel">ID Number</label>
+                    <input type="text" name="employee_id" class="form-control" placeholder="RG-2026-X" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-uppercase opacity-75">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="name@roadguard.gov" required>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase opacity-75">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-uppercase opacity-75">Confirm</label>
+                    <input type="password" name="confirm_password" class="form-control" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-signup">Create Workspace Account</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="/login">Log In Here</a>
+        </div>
+    </div>
+
+    <script>
+        function setRole(element, roleSlug) {
+            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('selectedRoleInput').value = roleSlug;
+
+            // Change the ID label based on role for better UX
+            const idLabel = document.getElementById('idLabel');
+            if(roleSlug === 'user') idLabel.innerText = "Phone Number";
+            else if(roleSlug === 'maintenance') idLabel.innerText = "Technician ID";
+            else idLabel.innerText = "Government ID";
+        }
+    </script>
+</body>
+</html>
